@@ -22,7 +22,7 @@ public final class SceneManager {
 
     public SceneManager(AppContext appContext, Stage stage) {
         this.appContext = appContext;
-        this.init(stage);
+        init(stage);
     }
 
     public void switchTo(SceneType sceneType) {
@@ -48,22 +48,15 @@ public final class SceneManager {
         this.stage = stage;
         this.stage.setTitle("Brass Birmingham");
         this.stage.setResizable(true);
+        this.stage.setFullScreen(true);
         this.stage.setMinWidth(MIN_WINDOW_WIDTH);
         this.stage.setMinHeight(MIN_WINDOW_HEIGHT);
 
         this.stage.setFullScreenExitHint("Press ESC to exit fullscreen.");
 
         Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-        this.stage.setWidth(Math.clamp(
-                DEFAULT_WINDOW_WIDTH,
-                MIN_WINDOW_WIDTH,
-                visualBounds.getWidth()
-        ));
-        this.stage.setHeight(Math.clamp(
-                DEFAULT_WINDOW_HEIGHT,
-                MIN_WINDOW_HEIGHT,
-                visualBounds.getHeight()
-        ));
+        this.stage.setWidth(Math.min(DEFAULT_WINDOW_WIDTH, visualBounds.getWidth()));
+        this.stage.setHeight(Math.min(DEFAULT_WINDOW_HEIGHT, visualBounds.getHeight()));
     }
 
     private void ensureInitialized() {

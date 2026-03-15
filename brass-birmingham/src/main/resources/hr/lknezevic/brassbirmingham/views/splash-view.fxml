@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane fx:id="root"
+           styleClass="splash-root"
+           stylesheets="@../styles/splash.css"
+           xmlns="http://javafx.com/javafx/23.0.1"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="hr.lknezevic.brassbirmingham.controllers.SplashController">
+
+    <ImageView fx:id="logoImage" styleClass="splash-logo" cache="true" preserveRatio="true" fitHeight="315.0">
+        <Image url="@../images/splash-logo.png" />
+    </ImageView>
+
+</StackPane>

@@ -1,0 +1,14 @@
+@import "theme.css";
+
+.splash-root {
+    -fx-background-color: linear-gradient(
+        to bottom,
+        -bb-bg-night 0%,
+        -bb-bg-canal-deep 62%,
+        -bb-bg-canal-mid 100%
+    );
+}
+
+.splash-logo {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.72), 34, 0.3, 0, 10);
+}

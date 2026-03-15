@@ -1,0 +1,26 @@
+.root {
+    -bb-bg-night: #0f141b;
+    -bb-bg-canal-deep: #182634;
+    -bb-bg-canal-mid: #264156;
+
+    -bb-surface-1: #1b2735;
+    -bb-surface-2: #243548;
+    -bb-surface-3: #2e435b;
+
+    -bb-border-soft: #3d556f;
+    -bb-border-strong: #6a829c;
+
+    -bb-text-primary: #f4efe3;
+    -bb-text-secondary: #d2d8e2;
+    -bb-text-muted: #a5b2c2;
+
+    -bb-accent-brass: #d6a656;
+    -bb-accent-brass-bright: #ebc987;
+    -bb-accent-canal: #6ea2be;
+    -bb-accent-coal: #748499;
+
+    -bb-success: #61927a;
+    -bb-danger: #b66a55;
+
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}

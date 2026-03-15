@@ -1,5 +1,6 @@
 package hr.lknezevic.brassbirmingham.enums;
 
+import hr.lknezevic.brassbirmingham.BrassBirminghamApplication;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +13,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public enum SceneType {
 
-    SPLASH("splash-view.fxml", "css/splash.css"),
-    LOBBY("views/lobby-view.fxml", "css/lobby.css"),
-    GAME("views/game-view.fxml", "css/game.css");
+    SPLASH("views/splash-view.fxml", "styles/splash.css"),
+    LOBBY("views/lobby-view.fxml", "styles/lobby.css"),
+    GAME("views/game-view.fxml", "styles/game.css");
 
     private final String viewResourcePath;
     private final String viewCssResourcePath;
@@ -22,7 +23,7 @@ public enum SceneType {
     public URL fxml() {
         log.debug("Loading FXML for scene {}", this);
 
-        URL url = SceneType.class.getResource(viewResourcePath);
+        URL url = BrassBirminghamApplication.class.getResource(viewResourcePath);
 
         if (url == null) {
             log.error("FXML not found: {}", viewResourcePath);
@@ -33,7 +34,7 @@ public enum SceneType {
     }
 
     public Optional<String> css() {
-        URL url = SceneType.class.getResource(viewCssResourcePath);
+        URL url = BrassBirminghamApplication.class.getResource(viewCssResourcePath);
 
         if (url == null) {
             log.warn("CSS not found for scene {}", this);
