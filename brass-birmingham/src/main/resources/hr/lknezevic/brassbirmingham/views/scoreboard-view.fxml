@@ -26,12 +26,12 @@
                 <TextField fx:id="searchField" promptText="Search by username..." />
 
                 <HBox spacing="8">
-                    <Label minWidth="80" prefWidth="70" styleClass="muted-text" text="#" />
+                    <Label minWidth="80" prefWidth="80" styleClass="muted-text" text="#" />
                     <Label minWidth="280" prefWidth="280" styleClass="muted-text" text="Username" />
                     <Label minWidth="120" prefWidth="120" styleClass="muted-text" text="Played" />
-                    <Label minWidth="120" prefWidth="100" styleClass="muted-text" text="Wins" />
+                    <Label minWidth="120" prefWidth="120" styleClass="muted-text" text="Wins" />
                     <Label minWidth="120" prefWidth="120" styleClass="muted-text" text="Losses" />
-                    <Label minWidth="120" prefWidth="130" styleClass="muted-text" text="Score (W/L)" />
+                    <Label minWidth="120" prefWidth="120" styleClass="muted-text" text="Score (W/L)" />
                 </HBox>
 
                 <ListView fx:id="rankingListView" styleClass="scoreboard-list" VBox.vgrow="ALWAYS" />
