@@ -56,7 +56,7 @@ public class SplashController {
 
         intro.setOnFinished(event -> pulse.play());
         pulse.setOnFinished(event -> fadeOut.play());
-        fadeOut.setOnFinished(event -> sceneManager.switchTo(SceneType.LOBBY));
+        fadeOut.setOnFinished(event -> sceneManager.switchTo(SceneType.SCOREBOARD));
 
         intro.play();
     }

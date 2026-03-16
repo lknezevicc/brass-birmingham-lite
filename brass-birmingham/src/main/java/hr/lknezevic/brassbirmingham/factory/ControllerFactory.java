@@ -6,6 +6,7 @@ import hr.lknezevic.brassbirmingham.controllers.LobbyController;
 import hr.lknezevic.brassbirmingham.controllers.ScoreboardController;
 import hr.lknezevic.brassbirmingham.controllers.SplashController;
 import hr.lknezevic.brassbirmingham.controllers.StatusBarController;
+import hr.lknezevic.brassbirmingham.controllers.component.LobbyPlayerController;
 import hr.lknezevic.brassbirmingham.scene.SceneManager;
 import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +22,10 @@ public final class ControllerFactory implements Callback<Class<?>, Object> {
         factories = Map.of(
                 SplashController.class, () -> new SplashController(sceneManager),
                 LobbyController.class, () -> new LobbyController(appState, sceneManager),
-                ScoreboardController.class, () -> new ScoreboardController(appState, sceneManager),
+                ScoreboardController.class, () -> new ScoreboardController(sceneManager),
                 GameController.class, () -> new GameController(appState, sceneManager),
-                StatusBarController.class, () -> new StatusBarController(appState)
+                StatusBarController.class, () -> new StatusBarController(appState),
+                LobbyPlayerController.class, () -> new LobbyPlayerController(appState)
         );
     }
 

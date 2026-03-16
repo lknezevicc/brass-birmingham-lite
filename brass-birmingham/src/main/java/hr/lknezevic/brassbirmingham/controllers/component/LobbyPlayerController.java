@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class LobbyPlayerController {
+public final class LobbyPlayerController {
 
     private final AppState appState;
 
@@ -15,8 +15,9 @@ public class LobbyPlayerController {
 
     @FXML
     private void initialize() {
-        playerNameField.textProperty().addListener((obs, oldVal, newVal) -> {
-            appState.setPlayerName(newVal == null ? "" : newVal.trim());
-        });
+        playerNameField.textProperty().addListener(
+                (obs, oldVal, newVal) ->
+                        appState.setPlayerName(newVal == null ? "" : newVal.trim())
+        );
     }
 }
