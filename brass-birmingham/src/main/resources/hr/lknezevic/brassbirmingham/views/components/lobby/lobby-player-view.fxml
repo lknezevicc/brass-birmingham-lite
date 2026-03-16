@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxWidth="460" spacing="10" styleClass="panel-card" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.lknezevic.brassbirmingham.controllers.component.LobbyPlayerController">
+
+    <Label styleClass="section-title" text="Player" />
+    <TextField fx:id="playerNameField" promptText="Player name" />
+</VBox>

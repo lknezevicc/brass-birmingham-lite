@@ -6,6 +6,8 @@ module hr.lknezevic.brassbirmingham {
     requires org.apache.commons.lang3;
     requires com.fasterxml.jackson.databind;
     requires org.slf4j;
+    requires java.net.http;
+    requires java.desktop;
 
     opens hr.lknezevic.brassbirmingham to javafx.fxml;
     exports hr.lknezevic.brassbirmingham;
@@ -22,4 +24,6 @@ module hr.lknezevic.brassbirmingham {
 
     exports hr.lknezevic.brassbirmingham.controllers;
     opens hr.lknezevic.brassbirmingham.controllers to javafx.fxml;
+    exports hr.lknezevic.brassbirmingham.controllers.component;
+    opens hr.lknezevic.brassbirmingham.controllers.component to javafx.fxml;
 }

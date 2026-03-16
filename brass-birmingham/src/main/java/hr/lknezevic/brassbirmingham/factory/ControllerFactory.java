@@ -3,6 +3,7 @@ package hr.lknezevic.brassbirmingham.factory;
 import hr.lknezevic.brassbirmingham.app.AppState;
 import hr.lknezevic.brassbirmingham.controllers.GameController;
 import hr.lknezevic.brassbirmingham.controllers.LobbyController;
+import hr.lknezevic.brassbirmingham.controllers.ScoreboardController;
 import hr.lknezevic.brassbirmingham.controllers.SplashController;
 import hr.lknezevic.brassbirmingham.controllers.StatusBarController;
 import hr.lknezevic.brassbirmingham.scene.SceneManager;
@@ -20,6 +21,7 @@ public final class ControllerFactory implements Callback<Class<?>, Object> {
         factories = Map.of(
                 SplashController.class, () -> new SplashController(sceneManager),
                 LobbyController.class, () -> new LobbyController(appState, sceneManager),
+                ScoreboardController.class, () -> new ScoreboardController(appState, sceneManager),
                 GameController.class, () -> new GameController(appState, sceneManager),
                 StatusBarController.class, () -> new StatusBarController(appState)
         );

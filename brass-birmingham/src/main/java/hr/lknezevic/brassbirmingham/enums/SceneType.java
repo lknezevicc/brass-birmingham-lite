@@ -15,6 +15,7 @@ public enum SceneType {
 
     SPLASH("views/splash-view.fxml", "styles/splash.css"),
     LOBBY("views/lobby-view.fxml", "styles/lobby.css"),
+    SCOREBOARD("views/scoreboard-view.fxml", "styles/lobby.css"),
     GAME("views/game-view.fxml", "styles/game.css");
 
     private final String viewResourcePath;
