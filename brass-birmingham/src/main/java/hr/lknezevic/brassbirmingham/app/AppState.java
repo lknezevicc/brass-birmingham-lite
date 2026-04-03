@@ -8,8 +8,10 @@ public class AppState {
     private final StringProperty roomCode = new SimpleStringProperty("---");
     private final StringProperty connectionStatus = new SimpleStringProperty("Offline");
     private final StringProperty networkHost = new SimpleStringProperty("127.0.0.1");
-    private final StringProperty networkPort = new SimpleStringProperty("5050");
+    private final StringProperty networkPort = new SimpleStringProperty("1099");
     private final StringProperty replayFilePath = new SimpleStringProperty("replays/latest-replay.xml");
+    private final StringProperty saveFilePath = new SimpleStringProperty("saves/latest-game.ser");
+    private final StringProperty reportFilePath = new SimpleStringProperty("reports/industry-report.html");
 
     private SessionMode sessionMode = SessionMode.LOCAL;
     private int localPlayerIndex = 0;
@@ -91,7 +93,7 @@ public class AppState {
 
     public void setNetworkPort(String networkPort) {
         if (networkPort == null || networkPort.isBlank()) {
-            this.networkPort.set("5050");
+            this.networkPort.set("1099");
             return;
         }
 
@@ -113,6 +115,38 @@ public class AppState {
         }
 
         this.replayFilePath.set(replayFilePath.trim());
+    }
+
+    public String getSaveFilePath() {
+        return saveFilePath.get();
+    }
+
+    public StringProperty saveFilePathProperty() {
+        return saveFilePath;
+    }
+
+    public void setSaveFilePath(String path) {
+        if (path == null || path.isBlank()) {
+            this.saveFilePath.set("saves/latest-game.ser");
+            return;
+        }
+        this.saveFilePath.set(path.trim());
+    }
+
+    public String getReportFilePath() {
+        return reportFilePath.get();
+    }
+
+    public StringProperty reportFilePathProperty() {
+        return reportFilePath;
+    }
+
+    public void setReportFilePath(String path) {
+        if (path == null || path.isBlank()) {
+            this.reportFilePath.set("reports/industry-report.html");
+            return;
+        }
+        this.reportFilePath.set(path.trim());
     }
 
     public SessionMode getSessionMode() {
