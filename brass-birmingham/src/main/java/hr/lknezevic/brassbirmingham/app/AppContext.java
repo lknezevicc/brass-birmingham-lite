@@ -8,19 +8,20 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public final class AppContext {
+    private final AppState appState;
+    private final GameSession gameSession;
     private final SceneManager sceneManager;
     private final SceneLoader sceneLoader;
 
     public AppContext(Stage stage) {
+        this.appState = new AppState();
+        this.gameSession = new GameSession(appState);
         this.sceneManager = new SceneManager(this, stage);
-        this.sceneLoader = new SceneLoader(new ControllerFactory(new AppState(), sceneManager));
+        this.sceneLoader = new SceneLoader(new ControllerFactory(appState, sceneManager, gameSession));
     }
 
-    public SceneManager sceneManager() {
-        return sceneManager;
-    }
-
-    public SceneLoader sceneLoader() {
-        return sceneLoader;
-    }
+    public AppState appState() { return appState; }
+    public GameSession gameSession() { return gameSession; }
+    public SceneManager sceneManager() { return sceneManager; }
+    public SceneLoader sceneLoader() { return sceneLoader; }
 }
