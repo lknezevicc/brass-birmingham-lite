@@ -15,7 +15,6 @@ public final class HeaderController {
 
     @FXML
     private void initialize() {
-        // empty
     }
 
     public void setTitle(String titleText) {

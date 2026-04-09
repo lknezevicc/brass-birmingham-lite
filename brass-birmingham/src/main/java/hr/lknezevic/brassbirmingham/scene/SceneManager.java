@@ -2,6 +2,7 @@ package hr.lknezevic.brassbirmingham.scene;
 
 import hr.lknezevic.brassbirmingham.app.AppContext;
 import hr.lknezevic.brassbirmingham.enums.SceneType;
+import hr.lknezevic.brassbirmingham.logging.GameFlowLogger;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,6 +27,7 @@ public final class SceneManager {
     }
 
     public void switchTo(SceneType sceneType) {
+        GameFlowLogger.entering("scene={}", sceneType);
         ensureInitialized();
         Parent root = appContext.sceneLoader().loadRoot(sceneType);
 
@@ -68,6 +70,12 @@ public final class SceneManager {
 
     private void applySceneCss(SceneType sceneType, Scene appScene) {
         appScene.getStylesheets().clear();
+
+        var themeUrl = getClass().getResource("/hr/lknezevic/brassbirmingham/styles/theme.css");
+        if (themeUrl != null) {
+            appScene.getStylesheets().add(themeUrl.toExternalForm());
+        }
+
         sceneType.css().ifPresent(appScene.getStylesheets()::add);
     }
 }
