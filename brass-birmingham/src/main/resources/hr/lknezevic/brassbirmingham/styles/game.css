@@ -1,0 +1,102 @@
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.info-bar .label {
+    -fx-font-size: 13px;
+}
+
+.player-info {
+    -fx-font-size: 12px;
+}
+
+.board-pane {
+    -fx-background-color: #182634;
+    -fx-border-color: #3d556f;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.action-toolbar {
+    -fx-padding: 6 0;
+}
+
+.action-btn {
+    -fx-min-width: 80;
+    -fx-pref-height: 30;
+}
+
+.action-btn.active {
+    -fx-background-color: #d6a656;
+    -fx-text-fill: #0f141b;
+    -fx-font-weight: bold;
+}
+
+.status-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #d2d8e2;
+}
+
+.card-hand-view {
+    -fx-padding: 4 0;
+}
+
+.card-tile {
+    -fx-background-color: #1e2d3d;
+    -fx-border-color: #3d556f;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8 6;
+    -fx-min-width: 72;
+    -fx-max-width: 80;
+    -fx-cursor: hand;
+}
+
+.card-tile:hover {
+    -fx-border-color: #7a9bb8;
+}
+
+.card-tile-selected {
+    -fx-border-color: #d6a656;
+    -fx-border-width: 2;
+    -fx-background-color: #263a4d;
+}
+
+.card-icon {
+    -fx-icon-color: #a8c4d8;
+}
+
+.card-tile-selected .card-icon {
+    -fx-icon-color: #d6a656;
+}
+
+.card-label {
+    -fx-font-size: 10px;
+    -fx-text-fill: #c8d4e0;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.help-pane {
+    -fx-font-size: 12px;
+    -fx-background-color: #1a2636;
+    -fx-border-color: #3d556f;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.help-pane > .title {
+    -fx-font-weight: bold;
+}
+
+.help-pane > *.content {
+    -fx-background-color: #1a2636;
+}
+
+.help-body {
+    -fx-font-size: 11px;
+    -fx-text-fill: #a0b0c0;
+    -fx-padding: 6 8;
+    -fx-line-spacing: 2;
+}

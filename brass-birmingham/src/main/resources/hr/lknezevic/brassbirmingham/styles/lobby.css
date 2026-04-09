@@ -1,0 +1,14 @@
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.panel-card {
+    -fx-padding: 16px;
+    -fx-background-radius: 8px;
+}
+
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}

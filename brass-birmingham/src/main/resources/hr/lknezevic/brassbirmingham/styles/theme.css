@@ -1,4 +1,5 @@
 .root {
+    /* Brass Birmingham brand tokens — layered on top of AtlantaFX PrimerDark */
     -bb-bg-night: #0f141b;
     -bb-bg-canal-deep: #182634;
     -bb-bg-canal-mid: #264156;
@@ -22,5 +23,7 @@
     -bb-success: #61927a;
     -bb-danger: #b66a55;
 
-    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    /* Override PrimerDark accent with Brass gold for focused elements */
+    -color-accent-emphasis: -bb-accent-brass;
+    -color-accent-fg: -bb-accent-brass-bright;
 }
