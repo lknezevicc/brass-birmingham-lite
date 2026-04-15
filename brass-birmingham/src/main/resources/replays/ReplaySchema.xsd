@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="brass-replay">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="metadata" type="MetadataType"/>
+                <xs:element name="era" type="EraType" maxOccurs="2"/>
+                <xs:element name="result" type="ResultType" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="version" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="MetadataType">
+        <xs:sequence>
+            <xs:element name="date" type="xs:string"/>
+            <xs:element name="players" type="PlayersType"/>
+            <xs:element name="map" type="xs:string"/>
+            <xs:element name="deck-seed" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="PlayersType">
+        <xs:sequence>
+            <xs:element name="player" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="index" type="xs:int" use="required"/>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="EraType">
+        <xs:sequence>
+            <xs:element name="round" type="RoundType" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="RoundType">
+        <xs:sequence>
+            <xs:element name="move" type="MoveType" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="number" type="xs:int" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="MoveType">
+        <xs:sequence>
+            <xs:element name="params" type="ParamsType"/>
+        </xs:sequence>
+        <xs:attribute name="player" type="xs:int" use="required"/>
+        <xs:attribute name="action" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="ParamsType">
+        <xs:sequence>
+            <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ResultType">
+        <xs:attribute name="winner" type="xs:int" use="required"/>
+        <xs:attribute name="final-scores" type="xs:string" use="required"/>
+    </xs:complexType>
+
+</xs:schema>
