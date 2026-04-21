@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    SpotBugs exclusion filter.
+
+    EI_EXPOSE_REP / EI_EXPOSE_REP2 (returning or storing a reference to a
+    mutable object) is intentional across this codebase:
+
+      * DI wiring (AppContext, ControllerFactory) deliberately shares single
+        instances of AppState / GameSession with every controller and view
+        model — copying them would defeat dependency injection.
+      * JavaFX MVVM view models expose their observable Property / ObservableList
+        objects on purpose so the FXML bindings can observe them live.
+      * Small immutable-by-convention model records/DTOs favour terse code over
+        defensive copies for a 2-player local game.
+
+    These are low-severity style findings, so they are filtered here to keep the
+    report focused on real defects. All other SpotBugs rules stay active.
+-->
+<FindBugsFilter>
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+</FindBugsFilter>
