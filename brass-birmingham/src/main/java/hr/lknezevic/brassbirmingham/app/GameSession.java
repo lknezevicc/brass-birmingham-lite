@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -25,7 +26,7 @@ public final class GameSession {
 
     private RulesEngine localEngine;
     private ReplayWriter localReplayWriter;
-    private volatile GameStateSnapshot lastSnapshot;
+    private final AtomicReference<GameStateSnapshot> lastSnapshot = new AtomicReference<>();
 
     private Consumer<GameStateSnapshot> onStateChange;
     private Consumer<ChatMessage> onChatMessage;
@@ -87,10 +88,11 @@ public final class GameSession {
         if (appState.getSessionMode() == SessionMode.LOCAL) {
             return localEngine != null ? localEngine.getState() : null;
         }
-        return lastSnapshot != null ? lastSnapshot.getState() : null;
+        GameStateSnapshot snap = lastSnapshot.get();
+        return snap != null ? snap.getState() : null;
     }
 
-    public GameStateSnapshot getLastSnapshot() { return lastSnapshot; }
+    public GameStateSnapshot getLastSnapshot() { return lastSnapshot.get(); }
     public RulesEngine getLocalEngine() { return localEngine; }
     public ReplayWriter getLocalReplayWriter() { return localReplayWriter; }
     public boolean isOnline() { return appState.getSessionMode() == SessionMode.ONLINE; }
@@ -107,7 +109,7 @@ public final class GameSession {
             return CompletableFuture.completedFuture(null);
         }
         return networkHelper.getAsyncService().getState(networkHelper.getRoomCode()).thenApply(s -> {
-            lastSnapshot = s;
+            lastSnapshot.set(s);
             return s;
         });
     }
@@ -138,7 +140,7 @@ public final class GameSession {
                 state.getPlayers().stream().map(p -> p.getName()).toList(),
                 state.getDeck().getSeed());
         GameStateSnapshot snapshot = new GameStateSnapshot(state);
-        lastSnapshot = snapshot;
+        lastSnapshot.set(snapshot);
         if (onStateChange != null) Platform.runLater(() -> onStateChange.accept(snapshot));
     }
 
@@ -147,7 +149,7 @@ public final class GameSession {
     }
 
     private void handleStateUpdate(GameStateSnapshot snapshot) {
-        lastSnapshot = snapshot;
+        lastSnapshot.set(snapshot);
         if (onStateChange != null) onStateChange.accept(snapshot);
     }
 
@@ -165,7 +167,7 @@ public final class GameSession {
         }
 
         GameStateSnapshot snapshot = new GameStateSnapshot(localEngine.getState());
-        lastSnapshot = snapshot;
+        lastSnapshot.set(snapshot);
         boolean gameOver = localEngine.isGameOver();
         int winner = gameOver ? localEngine.getWinnerPlayerId() : -1;
 

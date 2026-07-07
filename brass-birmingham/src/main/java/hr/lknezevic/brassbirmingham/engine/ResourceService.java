@@ -86,36 +86,8 @@ public final class ResourceService {
         Set<BoardEdge> active = state.getCityNetwork().activeLinks(board);
         int remaining = amount;
 
-        for (PlacedIndustry pi : board.getPlacedIndustries()) {
-            if (remaining <= 0) break;
-            if (pi.getType() != IndustryType.BREWERY || pi.isFlipped() || pi.getRemainingResources() <= 0) continue;
-            if (pi.getOwnerId() != playerId) continue;
-
-            while (remaining > 0 && pi.getRemainingResources() > 0) {
-                pi.consumeResource();
-                remaining--;
-                if (pi.isResourceDepleted()) {
-                    pi.flip();
-                    grantFlipIncome(state, pi);
-                }
-            }
-        }
-
-        for (PlacedIndustry pi : board.getPlacedIndustries()) {
-            if (remaining <= 0) break;
-            if (pi.getType() != IndustryType.BREWERY || pi.isFlipped() || pi.getRemainingResources() <= 0) continue;
-            if (pi.getOwnerId() == playerId) continue;
-            if (!state.getCityNetwork().isConnected(sellingCity, pi.getCity(), active)) continue;
-
-            while (remaining > 0 && pi.getRemainingResources() > 0) {
-                pi.consumeResource();
-                remaining--;
-                if (pi.isResourceDepleted()) {
-                    pi.flip();
-                    grantFlipIncome(state, pi);
-                }
-            }
-        }
+        remaining = drainBreweries(state, board, playerId, true, null, active, remaining);
+        remaining = drainBreweries(state, board, playerId, false, sellingCity, active, remaining);
 
         while (remaining > 0 && board.getMerchantBeer() > 0) {
             board.consumeMerchantBeer();
@@ -123,6 +95,37 @@ public final class ResourceService {
         }
 
         return 0;
+    }
+
+    private static int drainBreweries(GameState state, Board board, int playerId,
+                                      boolean ownOnly, CityId sellingCity,
+                                      Set<BoardEdge> active, int remaining) {
+        for (PlacedIndustry pi : board.getPlacedIndustries()) {
+            if (remaining <= 0) break;
+            if (!isUsableBrewery(pi)) continue;
+            if (ownOnly && pi.getOwnerId() != playerId) continue;
+            if (!ownOnly && pi.getOwnerId() == playerId) continue;
+            if (!ownOnly && !state.getCityNetwork().isConnected(sellingCity, pi.getCity(), active)) continue;
+
+            remaining = drainSingle(state, pi, remaining);
+        }
+        return remaining;
+    }
+
+    private static boolean isUsableBrewery(PlacedIndustry pi) {
+        return pi.getType() == IndustryType.BREWERY && !pi.isFlipped() && pi.getRemainingResources() > 0;
+    }
+
+    private static int drainSingle(GameState state, PlacedIndustry pi, int remaining) {
+        while (remaining > 0 && pi.getRemainingResources() > 0) {
+            pi.consumeResource();
+            remaining--;
+            if (pi.isResourceDepleted()) {
+                pi.flip();
+                grantFlipIncome(state, pi);
+            }
+        }
+        return remaining;
     }
 
     private static PlacedIndustry findNearestConnectedCoal(GameState state, CityId from, Set<BoardEdge> active) {

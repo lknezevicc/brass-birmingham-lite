@@ -6,6 +6,7 @@ import hr.lknezevic.brassbirmingham.model.game.GameState;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -117,7 +118,10 @@ public final class ReplayWriter {
             throw new IllegalStateException("Failed to create directory: " + parent);
         }
         try {
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            TransformerFactory tf = TransformerFactory.newInstance();
+            tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+            Transformer transformer = tf.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             transformer.transform(new DOMSource(document), new StreamResult(file));
@@ -129,7 +133,10 @@ public final class ReplayWriter {
     public String writeToString() {
         if (document == null) return "";
         try {
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            TransformerFactory tf = TransformerFactory.newInstance();
+            tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+            Transformer transformer = tf.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             StringWriter sw = new StringWriter();

@@ -171,12 +171,14 @@ public final class GameBoardInteractor {
         setModeStyle(sellBtn, actionMode == BoardActionMode.SELL);
     }
 
+    private static final String ACTIVE_CLASS = "active";
+
     private void setModeStyle(Button btn, boolean active) {
         if (btn == null) return;
         if (active) {
-            if (!btn.getStyleClass().contains("active")) btn.getStyleClass().add("active");
+            if (!btn.getStyleClass().contains(ACTIVE_CLASS)) btn.getStyleClass().add(ACTIVE_CLASS);
         } else {
-            btn.getStyleClass().remove("active");
+            btn.getStyleClass().remove(ACTIVE_CLASS);
         }
     }
 }

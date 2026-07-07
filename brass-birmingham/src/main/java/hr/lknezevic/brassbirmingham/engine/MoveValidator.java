@@ -31,6 +31,7 @@ public final class MoveValidator {
             case SellAction sell -> SellMoveValidator.validate(state, player, sell, errors);
             case LoanAction loan -> LoanMoveValidator.validate(state, player, loan, errors);
             case ScoutAction scout -> ScoutMoveValidator.validate(state, player, scout, errors);
+            default -> errors.add("Unknown action type: " + action.getClass().getSimpleName());
         }
 
         return errors;

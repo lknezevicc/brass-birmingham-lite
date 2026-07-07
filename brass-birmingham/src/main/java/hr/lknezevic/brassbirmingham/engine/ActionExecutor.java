@@ -27,6 +27,7 @@ public final class ActionExecutor {
             case SellAction sell -> executeSell(state, player, sell);
             case LoanAction loan -> executeLoan(state, player, loan);
             case ScoutAction scout -> executeScout(state, player, scout);
+            default -> throw new IllegalStateException("Unknown action: " + action.getClass());
         }
 
         state.decrementActions();

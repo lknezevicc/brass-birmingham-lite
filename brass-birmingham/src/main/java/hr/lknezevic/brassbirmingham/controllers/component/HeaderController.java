@@ -15,6 +15,7 @@ public final class HeaderController {
 
     @FXML
     private void initialize() {
+        // FXML lifecycle hook — fields are injected here, no setup needed
     }
 
     public void setTitle(String titleText) {

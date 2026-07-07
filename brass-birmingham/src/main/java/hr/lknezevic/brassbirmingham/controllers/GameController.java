@@ -66,6 +66,33 @@ public class GameController {
     @FXML
     private void initialize() {
         GameFlowLogger.entering("online={}", gameSession.isOnline());
+        bindLabels();
+
+        submitter = new GameActionSubmitter(gameSession, viewModel, () -> {
+            applyState(gameSession.getCurrentState());
+            updateButtonStates();
+        });
+        interactor = new GameBoardInteractor(gameSession, viewModel, submitter, this::getSelectedOrFirstCard);
+
+        viewModel.myTurnProperty().addListener((obs, wasMyTurn, isMyTurn) -> updateButtonStates());
+        viewModel.gameOverProperty().addListener((obs, was, isOver) -> updateButtonStates());
+
+        gameSession.setOnStateChange(this::onStateUpdated);
+        gameSession.setOnChatMessage(this::onChatReceived);
+        gameSession.setOnGameOver(this::onGameOver);
+
+        initCanvas();
+
+        if (gameSession.isOnline()) {
+            gameSession.fetchState().thenAccept(snapshot -> {
+                if (snapshot != null) Platform.runLater(() -> applyState(snapshot.getState()));
+            });
+        } else {
+            applyState(gameSession.getCurrentState());
+        }
+    }
+
+    private void bindLabels() {
         if (eraLabel != null) eraLabel.textProperty().bind(viewModel.eraProperty());
         if (roundLabel != null) roundLabel.textProperty().bind(viewModel.roundProperty());
         if (turnLabel != null) turnLabel.textProperty().bind(viewModel.currentTurnPlayerProperty());
@@ -81,43 +108,23 @@ public class GameController {
             viewModel.getHandItems().addListener((javafx.collections.ListChangeListener<hr.lknezevic.brassbirmingham.ui.CardDisplayItem>) c ->
                     cardHandView.update(viewModel.getHandItems()));
         }
+    }
 
-        submitter = new GameActionSubmitter(gameSession, viewModel, () -> {
-            applyState(gameSession.getCurrentState());
-            updateButtonStates();
+    private void initCanvas() {
+        if (boardCanvas == null) return;
+        BoardRenderer renderer = new BoardRenderer(boardCanvas);
+        interactor.init(boardCanvas, renderer, buildBtn, networkBtn, sellBtn);
+        boardCanvas.setOnMouseClicked(interactor::onCanvasClicked);
+        boardCanvas.setFocusTraversable(true);
+        boardCanvas.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ESCAPE) interactor.cancelActionMode();
         });
-        interactor = new GameBoardInteractor(gameSession, viewModel, submitter, this::getSelectedOrFirstCard);
 
-        viewModel.myTurnProperty().addListener((obs, wasMyTurn, isMyTurn) -> updateButtonStates());
-        viewModel.gameOverProperty().addListener((obs, was, isOver) -> updateButtonStates());
-
-        gameSession.setOnStateChange(this::onStateUpdated);
-        gameSession.setOnChatMessage(this::onChatReceived);
-        gameSession.setOnGameOver(this::onGameOver);
-
-        if (boardCanvas != null) {
-            BoardRenderer renderer = new BoardRenderer(boardCanvas);
-            interactor.init(boardCanvas, renderer, buildBtn, networkBtn, sellBtn);
-            boardCanvas.setOnMouseClicked(interactor::onCanvasClicked);
-            boardCanvas.setFocusTraversable(true);
-            boardCanvas.setOnKeyPressed(e -> {
-                if (e.getCode() == KeyCode.ESCAPE) interactor.cancelActionMode();
-            });
-
-            if (canvasPane != null) {
-                boardCanvas.widthProperty().bind(canvasPane.widthProperty());
-                boardCanvas.heightProperty().bind(canvasPane.heightProperty());
-                canvasPane.widthProperty().addListener((obs, o, n) -> interactor.repaintBoard());
-                canvasPane.heightProperty().addListener((obs, o, n) -> interactor.repaintBoard());
-            }
-        }
-
-        if (gameSession.isOnline()) {
-            gameSession.fetchState().thenAccept(snapshot -> {
-                if (snapshot != null) Platform.runLater(() -> applyState(snapshot.getState()));
-            });
-        } else {
-            applyState(gameSession.getCurrentState());
+        if (canvasPane != null) {
+            boardCanvas.widthProperty().bind(canvasPane.widthProperty());
+            boardCanvas.heightProperty().bind(canvasPane.heightProperty());
+            canvasPane.widthProperty().addListener((obs, o, n) -> interactor.repaintBoard());
+            canvasPane.heightProperty().addListener((obs, o, n) -> interactor.repaintBoard());
         }
     }
 

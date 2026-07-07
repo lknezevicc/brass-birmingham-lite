@@ -16,6 +16,8 @@ public class GameServiceImpl extends UnicastRemoteObject implements GameService 
 
     private static final long serialVersionUID = 1L;
 
+    private static final String GAME_NOT_STARTED = "Game not started";
+
     private final transient GameRoomRegistry registry;
     private final List<LeaderboardEntry> leaderboard = new ArrayList<>();
 
@@ -51,7 +53,7 @@ public class GameServiceImpl extends UnicastRemoteObject implements GameService 
     @Override
     public GameStateSnapshot getState(String roomCode) throws RemoteException {
         GameRoom room = getExistingRoom(roomCode);
-        if (room.getEngine() == null) throw new RemoteException("Game not started");
+        if (room.getEngine() == null) throw new RemoteException(GAME_NOT_STARTED);
         return new GameStateSnapshot(room.getEngine().getState());
     }
 
@@ -59,7 +61,7 @@ public class GameServiceImpl extends UnicastRemoteObject implements GameService 
     public MoveResult submitMove(String roomCode, int playerIndex, GameAction action) throws RemoteException {
         log.info("Move received: room={}, player={}, action={}", roomCode, playerIndex, action.getClass().getSimpleName());
         GameRoom room = getExistingRoom(roomCode);
-        if (room.getEngine() == null) throw new RemoteException("Game not started");
+        if (room.getEngine() == null) throw new RemoteException(GAME_NOT_STARTED);
 
         ReentrantLock lock = room.getMoveLock();
         lock.lock();
@@ -133,7 +135,7 @@ public class GameServiceImpl extends UnicastRemoteObject implements GameService 
     @Override
     public void saveGame(String roomCode) throws RemoteException {
         GameRoom room = getExistingRoom(roomCode);
-        if (room.getEngine() == null) throw new RemoteException("Game not started");
+        if (room.getEngine() == null) throw new RemoteException(GAME_NOT_STARTED);
         ReentrantLock lock = room.getMoveLock();
         lock.lock();
         try {

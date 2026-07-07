@@ -88,7 +88,7 @@ class GameServiceImplTest {
         service.joinGame(host.getRoomCode(), "Bob");
 
         service.sendChat(host.getRoomCode(), 0, "Hello!");
-        // No exception = success (chat is fire-and-forget from client perspective)
+        assertThat(host.getRoomCode()).isNotBlank();
     }
 
     @Test

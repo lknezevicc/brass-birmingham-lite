@@ -46,6 +46,7 @@ public final class ReplayParamEncoder {
                 params.put("discard1", encodeCard(sc.additionalDiscard1()));
                 params.put("discard2", encodeCard(sc.additionalDiscard2()));
             }
+            default -> throw new IllegalStateException("Unknown action type: " + action.getClass());
         }
         return params;
     }

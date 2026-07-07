@@ -14,6 +14,9 @@ import java.util.List;
 
 public final class HtmlReportGenerator {
 
+    private static final String TD_CLOSE = "</td>";
+    private static final String TR_CLOSE = "</tr>\n";
+
     private static final List<String> GETTER_NAMES = List.of(
             "getBuildCost", "getVictoryPoints", "getIncomeBonus",
             "getCoalRequired", "getIronRequired", "getBeerRequired",
@@ -63,18 +66,18 @@ public final class HtmlReportGenerator {
         sb.append("<tr><td>Class</td>");
         for (IndustryLevel level : IndustryLevel.values()) {
             Industry instance = Industry.create(type, level);
-            sb.append("<td>").append(instance.getClass().getSimpleName()).append("</td>");
+            sb.append("<td>").append(instance.getClass().getSimpleName()).append(TD_CLOSE);
         }
-        sb.append("</tr>\n");
+        sb.append(TR_CLOSE);
 
         for (String getterName : GETTER_NAMES) {
-            sb.append("<tr><td>").append(formatMethodName(getterName)).append("</td>");
+            sb.append("<tr><td>").append(formatMethodName(getterName)).append(TD_CLOSE);
             for (IndustryLevel level : IndustryLevel.values()) {
                 Industry instance = Industry.create(type, level);
                 String value = invokeGetter(instance, getterName);
-                sb.append("<td>").append(value).append("</td>");
+                sb.append("<td>").append(value).append(TD_CLOSE);
             }
-            sb.append("</tr>\n");
+            sb.append(TR_CLOSE);
         }
 
         sb.append("<tr><td>Declared Methods</td>");
@@ -82,9 +85,9 @@ public final class HtmlReportGenerator {
             Industry instance = Industry.create(type, level);
             Method[] methods = instance.getClass().getDeclaredMethods();
             String names = String.join(", ", Arrays.stream(methods).map(Method::getName).sorted().toList());
-            sb.append("<td><small>").append(names).append("</small></td>");
+            sb.append("<td><small>").append(names).append("</small>").append(TD_CLOSE);
         }
-        sb.append("</tr>\n");
+        sb.append(TR_CLOSE);
 
         sb.append("</tbody>\n</table>\n");
         return sb.toString();

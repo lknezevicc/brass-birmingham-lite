@@ -12,6 +12,8 @@ import javafx.scene.text.TextAlignment;
 
 public final class BoardDrawHelper {
 
+    private static final String FONT_FAMILY = "System";
+
     private BoardDrawHelper() {}
 
     public static void drawPlacedTile(GraphicsContext gc, Rectangle2D rect, PlacedIndustry placed) {
@@ -31,10 +33,10 @@ public final class BoardDrawHelper {
 
         if (!placed.isFlipped() && placed.getRemainingResources() > 0) {
             gc.setFill(BoardColors.ACCENT_BRASS_BRIGHT);
-            gc.setFont(Font.font("System", 7));
+            gc.setFont(Font.font(FONT_FAMILY, 7));
             gc.fillText("r:" + placed.getRemainingResources(),
                     rect.getMinX() + rect.getWidth() / 2, rect.getMinY() + rect.getHeight() - 4);
-            gc.setFont(Font.font("System", 9));
+            gc.setFont(Font.font(FONT_FAMILY, 9));
         }
     }
 
@@ -52,7 +54,7 @@ public final class BoardDrawHelper {
 
     public static void drawMarketHud(GraphicsContext gc, GameState state, double canvasHeight) {
         double x = 10, y = canvasHeight - 70;
-        gc.setFont(Font.font("System", 11));
+        gc.setFont(Font.font(FONT_FAMILY, 11));
         gc.setTextAlign(TextAlignment.LEFT);
         gc.setFill(BoardColors.SURFACE_2);
         gc.fillRoundRect(x, y, 140, 60, 8, 8);

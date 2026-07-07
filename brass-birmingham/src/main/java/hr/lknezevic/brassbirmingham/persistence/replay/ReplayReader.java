@@ -43,6 +43,9 @@ public final class ReplayReader {
 
     private SAXParser newValidatingParser() throws Exception {
         SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
         factory.setNamespaceAware(true);
 
         try (InputStream schemaStream = ReplayReader.class.getResourceAsStream(SCHEMA_RESOURCE)) {

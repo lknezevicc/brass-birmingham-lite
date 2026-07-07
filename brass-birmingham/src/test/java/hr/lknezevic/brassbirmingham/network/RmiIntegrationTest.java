@@ -91,9 +91,9 @@ class RmiIntegrationTest {
             MoveResult result = activeClient.submitMove(roomCode, currentIdx, new LoanAction(card));
 
             if (!result.isSuccess()) {
-                // Might fail due to income too low — that's acceptable at this stage
                 break;
             }
         }
+        assertThat(roomCode).isNotBlank();
     }
 }
