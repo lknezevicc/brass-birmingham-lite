@@ -14,8 +14,13 @@ public final class TurnManager {
 
     public static void advanceTurn(GameState state) {
         if (state.getActionsRemainingThisTurn() > 0) {
-            GameFlowLogger.event("Actions remaining: {}, no turn advance", state.getActionsRemainingThisTurn());
-            return;
+            if (!canPlayerAct(state)) {
+                GameFlowLogger.event("Player {} has no cards and deck empty — skipping remaining actions", state.getCurrentPlayerIndex());
+                state.setActionsRemainingThisTurn(0);
+            } else {
+                GameFlowLogger.event("Actions remaining: {}, no turn advance", state.getActionsRemainingThisTurn());
+                return;
+            }
         }
 
         GameFlowLogger.entering("player={}, round={}, era={}", state.getCurrentPlayerIndex(), state.getCurrentRound(), state.getCurrentEra());
@@ -25,10 +30,25 @@ public final class TurnManager {
 
         if (isEndOfRound(state, nextPlayer)) {
             endRound(state);
+            autoSkipIfNeeded(state);
         } else {
             state.setCurrentPlayerIndex(nextPlayer);
             state.setActionsRemainingThisTurn(2);
+            autoSkipIfNeeded(state);
         }
+    }
+
+    private static void autoSkipIfNeeded(GameState state) {
+        if (state.getPhase() == GamePhase.GAME_OVER) return;
+        if (!canPlayerAct(state)) {
+            GameFlowLogger.event("Player {} cannot act (no cards) — auto-advancing", state.getCurrentPlayerIndex());
+            state.setActionsRemainingThisTurn(0);
+            advanceTurn(state);
+        }
+    }
+
+    private static boolean canPlayerAct(GameState state) {
+        return !state.getCurrentPlayer().getHand().isEmpty() || !state.getDeck().isEmpty();
     }
 
     private static boolean isEndOfRound(GameState state, int nextPlayerIndex) {

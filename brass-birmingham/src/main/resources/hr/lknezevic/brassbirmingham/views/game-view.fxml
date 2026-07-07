@@ -65,6 +65,9 @@
         <Button fx:id="scoutBtn" text="Scout" onAction="#onScoutAction" styleClass="action-btn">
             <tooltip><Tooltip text="Discard 3 cards, draw 1 new one."/></tooltip>
         </Button>
+        <Button fx:id="skipBtn" text="Skip" onAction="#onSkipAction" styleClass="action-btn">
+            <tooltip><Tooltip text="Skip remaining actions this turn."/></tooltip>
+        </Button>
     </HBox>
 
     <!-- Hand + status -->

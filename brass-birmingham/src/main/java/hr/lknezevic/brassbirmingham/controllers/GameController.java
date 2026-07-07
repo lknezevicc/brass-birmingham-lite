@@ -5,12 +5,15 @@ import hr.lknezevic.brassbirmingham.app.GameSession;
 import hr.lknezevic.brassbirmingham.controllers.game.GameActionSubmitter;
 import hr.lknezevic.brassbirmingham.controllers.game.GameBoardInteractor;
 import hr.lknezevic.brassbirmingham.controllers.game.GamePersistenceHandler;
+import hr.lknezevic.brassbirmingham.engine.TurnManager;
 import hr.lknezevic.brassbirmingham.logging.GameFlowLogger;
 import hr.lknezevic.brassbirmingham.model.card.Card;
+import hr.lknezevic.brassbirmingham.model.game.GamePhase;
 import hr.lknezevic.brassbirmingham.model.game.GameState;
 import hr.lknezevic.brassbirmingham.network.dto.ChatMessage;
 import hr.lknezevic.brassbirmingham.network.dto.GameStateSnapshot;
 import hr.lknezevic.brassbirmingham.network.dto.MoveResult;
+import hr.lknezevic.brassbirmingham.enums.SceneType;
 import hr.lknezevic.brassbirmingham.scene.SceneManager;
 import hr.lknezevic.brassbirmingham.ui.AnimationHelper;
 import hr.lknezevic.brassbirmingham.ui.BoardActionMode;
@@ -56,6 +59,7 @@ public class GameController {
     @FXML private Button networkBtn;
     @FXML private Button sellBtn;
     @FXML private Button scoutBtn;
+    @FXML private Button skipBtn;
 
     private final AnimationHelper animationHelper = new AnimationHelper();
     private final CardHandView cardHandView = new CardHandView();
@@ -150,6 +154,22 @@ public class GameController {
     }
 
     @FXML
+    private void onSkipAction() {
+        interactor.resetForSubmission();
+        GameState state = gameSession.getCurrentState();
+        if (state == null) return;
+        GameFlowLogger.action("SKIP", "Player {} skipping remaining actions", state.getCurrentPlayerIndex());
+        state.setActionsRemainingThisTurn(0);
+        TurnManager.advanceTurn(state);
+        applyState(state);
+
+        if (state.getPhase() == GamePhase.GAME_OVER) {
+            int winner = state.getPlayers().get(0).getVictoryPoints() >= state.getPlayers().get(1).getVictoryPoints() ? 0 : 1;
+            onGameOver(MoveResult.ok(new GameStateSnapshot(state), true, winner));
+        }
+    }
+
+    @FXML
     private void onSendChat() { persistenceHandler.sendChat(gameSession, chatInput, chatArea); }
 
     @FXML
@@ -164,11 +184,25 @@ public class GameController {
 
     private void onGameOver(MoveResult result) {
         GameFlowLogger.event("Game over, winner=Player {}", result.getWinnerPlayerId() + 1);
-        viewModel.statusProperty().set("Game Over! Winner: Player " + (result.getWinnerPlayerId() + 1));
         viewModel.gameOverProperty().set(true);
         updateButtonStates();
         interactor.resetForSubmission();
         interactor.repaintBoard();
+
+        GameState finalState = gameSession.getCurrentState();
+        int p1Vp = finalState != null ? finalState.getPlayers().get(0).getVictoryPoints() : 0;
+        int p2Vp = finalState != null ? finalState.getPlayers().get(1).getVictoryPoints() : 0;
+        String winnerName = "Player " + (result.getWinnerPlayerId() + 1);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText(winnerName + " wins!");
+        alert.setContentText("Final scores:\n" +
+                "  Player 1: " + p1Vp + " VP\n" +
+                "  Player 2: " + p2Vp + " VP\n\n" +
+                "Click OK to return to lobby.");
+        alert.showAndWait();
+        sceneManager.switchTo(SceneType.LOBBY);
     }
 
     private void applyState(GameState state) {
@@ -188,7 +222,7 @@ public class GameController {
         boolean myTurn = viewModel.myTurnProperty().get();
         boolean over = viewModel.gameOverProperty().get();
         boolean disabled = !myTurn || over;
-        for (Button b : new Button[]{loanBtn, buildBtn, networkBtn, sellBtn, scoutBtn}) {
+        for (Button b : new Button[]{loanBtn, buildBtn, networkBtn, sellBtn, scoutBtn, skipBtn}) {
             if (b != null) b.setDisable(disabled);
         }
         if (!myTurn && !over) viewModel.statusProperty().set("Waiting for opponent...");
